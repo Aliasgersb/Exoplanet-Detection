@@ -326,6 +326,26 @@ export default function HowItWorks() {
         </p>
       </Section>
 
+      <Section title="Edge AI: True inference via WebAssembly">
+        <p>
+          A common constraint when deploying Machine Learning portfolios to free cloud hosting 
+          is backend memory limits. Loading TensorFlow and a Keras model requires more RAM 
+          than free tiers provide (typically 512MB), causing cloud servers to crash instantly.
+        </p>
+        <p>
+          To solve this without sacrificing live inference, this application was architected using 
+          <strong className="text-white">Edge AI</strong>. The Python CNN model was compiled into a highly compressed, 
+          quantized 13MB ONNX graph format.
+        </p>
+        <p>
+          When you click "Analyse This Star", your browser downloads this graph. A local WebAssembly 
+          engine (<code className="text-accent text-[11px] bg-accent/10 px-1 py-0.5 rounded-sm">onnxruntime-web</code>) parses the tensor and executes the neural network 
+          natively on your own device. The Python backend is stripped of all ML dependencies and is solely 
+          responsible for serving the raw CSV dataset. The actual prediction runs at zero server cost, 
+          with zero cold-start delay, using your local hardware.
+        </p>
+      </Section>
+
       <Section title="Honest limitations">
         <p>
           The fundamental constraint of this project is data. Only 37 confirmed planet examples
