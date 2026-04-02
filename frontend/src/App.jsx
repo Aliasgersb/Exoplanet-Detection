@@ -4,6 +4,7 @@ import ExploreStars from './components/ExploreStars';
 import ModelPerformance from './components/ModelPerformance';
 import HowItWorks from './components/HowItWorks';
 import About from './components/About';
+import MobileWarning from './components/MobileWarning';
 
 const NAV = [
   { id: 'overview',     label: 'Overview' },
@@ -31,6 +32,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-dark text-white flex font-sans antialiased">
+      <MobileWarning />
       {/* ── Sidebar ─────────────────────────────────────────────────────── */}
       <nav className="w-56 shrink-0 border-r border-border flex flex-col h-screen sticky top-0 px-10 py-12">
         <button
