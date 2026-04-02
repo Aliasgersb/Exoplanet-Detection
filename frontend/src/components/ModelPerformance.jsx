@@ -60,6 +60,16 @@ export default function ModelPerformance({ onNavigate }) {
             <div className="text-[10px] text-gray-600 uppercase tracking-widest py-1">Predicted: Non-Planet</div>
             <div className="text-[10px] text-gray-600 uppercase tracking-widest py-1">Predicted: Planet</div>
           </div>
+
+          {/* Error analysis */}
+          <div className="mt-5 border-l-2 border-border pl-4">
+            <p className="text-[11px] text-gray-600 leading-relaxed">
+              <span className="text-gray-500 font-medium">Error analysis —</span> The 3 false positives are Stars{' '}
+              <span className="text-gray-400">#311, #487, and #557</span>. Their raw light curves contain sharp,
+              isolated brightness dips — likely from eclipsing binary systems or instrumental artifacts —
+              that the model misidentified as planetary transit signals.
+            </p>
+          </div>
         </div>
 
         {/* Metrics */}
