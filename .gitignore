@@ -1,0 +1,26 @@
+# Environments
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node
+node_modules/
+dist/
+
+# Large training datasets (GitHub rejects files > 100MB)
+exoTrain*
+X_train*
+y_train*
+
+# Other model checkpoints (Keep only the stable cnn_model.h5)
+cnn_model*.keras
+
+# OS Files
+.DS_Store
+Thumbs.db
