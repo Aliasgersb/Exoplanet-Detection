@@ -1,34 +1,31 @@
 import React, { useState, useEffect } from 'react';
 
-/**
- * MobileWarning
- *
- * Pure JS detection — no CSS breakpoints — so it correctly handles:
- *   • Portrait phones   (always shown)
- *   • Landscape phones  (still shown — site layout breaks in landscape too)
- *   • Tablets ≥ 768px   (hidden — layout works acceptably)
- *   • Desktop           (hidden — zero impact)
- *   • Device rotation   (re-evaluates on every resize event)
- *
- * The threshold is 1024px (lg) because the sidebar + content requires at
- * least ~1000px to render correctly.
- */
-
-const BREAKPOINT = 1024;
-
 export default function MobileWarning() {
-  // Initialise synchronously so there is ZERO flash of content on mobile
-  const [show, setShow] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth < BREAKPOINT
-  );
+  // Compute initial state synchronously to prevent flashing
+  const [show, setShow] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    
+    // Check if the browser identifies as a mobile device.
+    // "Desktop Site" mode spoofs the UserAgent to Macintosh/Windows, making this false.
+    const isMobileUA = /Mobi|Android|iPhone|iPod/i.test(navigator.userAgent);
+    
+    // Only block if it is an actual physical mobile device AND the screen is small.
+    // This allows "Desktop Site" mode to bypass the block, and prevents real desktops
+    // with narrow windows from being locked out.
+    return isMobileUA && window.innerWidth < 1024;
+  });
 
   useEffect(() => {
-    const handler = () => setShow(window.innerWidth < BREAKPOINT);
+    const handler = () => {
+      const isMobileUA = /Mobi|Android|iPhone|iPod/i.test(navigator.userAgent);
+      setShow(isMobileUA && window.innerWidth < 1024);
+    };
+    
     window.addEventListener('resize', handler);
     return () => window.removeEventListener('resize', handler);
   }, []);
 
-  // Prevent the page behind from scrolling while the overlay is visible
+  // Lock scroll when visible
   useEffect(() => {
     if (show) {
       document.body.style.overflow = 'hidden';
@@ -43,6 +40,7 @@ export default function MobileWarning() {
   return (
     <div
       className="fixed inset-0 z-50 bg-dark flex flex-col items-center justify-center"
+
       role="dialog"
       aria-modal="true"
       aria-label="Desktop required"
