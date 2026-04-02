@@ -3,6 +3,5 @@ Flask-Cors
 pandas
 numpy
 scikit-learn
-tensorflow-cpu
 gunicorn
 werkzeug

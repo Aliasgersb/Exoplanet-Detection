@@ -5,8 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    proxy: {
-      // Proxy /api calls to Flask — optional, direct axios calls also work
-    }
-  }
+  },
+  optimizeDeps: {
+    // onnxruntime-web ships pre-bundled WASM files—do not let Vite try to
+    // re-bundle them; it would break the relative WASM path resolution.
+    exclude: ['onnxruntime-web'],
+  },
 })

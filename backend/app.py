@@ -43,19 +43,10 @@ X_test_norm = (X_test_raw - means) / stds
 
 true_labels = df_test["true_label"].values  # (570,)
 
-# ─── Load model ──────────────────────────────────────────────────────────────
-model = None
-def load_model():
-    global model
-    try:
-        import tensorflow as tf
-        print(f"TensorFlow {tf.__version__} – loading {MODEL_PATH} …", flush=True)
-        model = tf.keras.models.load_model(MODEL_PATH)
-        print("Model loaded OK.", flush=True)
-    except Exception as e:
-        print(f"[WARNING] Could not load model: {e}", flush=True)
-
-load_model()
+# ─── Architecture Note ───────────────────────────────────────────────────────
+# Model inference is executed entirely client-side via ONNX Web Runtime (WASM).
+# This backend serves only as a lightweight Data API (/stars, /star/<index>).
+# No TensorFlow or heavy ML libraries are required on this server.
 
 # ─── Routes ──────────────────────────────────────────────────────────────────
 
@@ -71,7 +62,6 @@ def get_stars():
         })
     return jsonify(stars)
 
-
 @app.route("/star/<int:index>", methods=["GET"])
 def get_star(index):
     """Return raw flux, folded flux, and label for one star."""
@@ -84,32 +74,6 @@ def get_star(index):
         "is_planet": bool(true_labels[index] == 1),
         "raw_flux": X_test_norm[index].tolist(),
         "folded_flux": X_test_folded[index].tolist(),
-    })
-
-
-@app.route("/predict", methods=["POST"])
-def predict():
-    """Run CNN v1 on a provided flux array."""
-    if model is None:
-        return jsonify({"error": "Model not loaded on server"}), 503
-
-    body = request.get_json(silent=True)
-    if not body or "flux" not in body:
-        return jsonify({"error": "Expected JSON body with key 'flux'"}), 400
-
-    flux = np.array(body["flux"], dtype=np.float32)
-    if flux.shape[0] != 3197:
-        return jsonify({"error": f"Expected 3197 flux values, got {flux.shape[0]}"}), 400
-
-    # Reshape for CNN: (1, 3197, 1)
-    x = flux.reshape(1, 3197, 1)
-    prob = float(model.predict(x, verbose=0)[0][0])
-    prediction = int(prob >= 0.5)
-
-    return jsonify({
-        "probability": round(prob, 6),
-        "prediction": prediction,
-        "is_planet_detected": bool(prediction == 1),
     })
 
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import Plot from 'react-plotly.js';
+import * as ort from 'onnxruntime-web';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
 
@@ -140,9 +141,31 @@ export default function ExploreStars() {
     setModelResult(null);
     setModelError(false);
     try {
-      const res = await axios.post(`${API_BASE}/predict`, { flux: starData.raw_flux }, { timeout: 15000 });
-      setModelResult(res.data);
-    } catch {
+      // 1. Initialize ONNX runtime session (Downloads once, caches internally)
+      const session = await ort.InferenceSession.create('/model.onnx');
+      
+      // 2. Perform Client-Side Z-Score Normalization
+      const flux = starData.raw_flux;
+      const mean = flux.reduce((a, b) => a + b, 0) / flux.length;
+      const std = Math.sqrt(flux.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b, 0) / flux.length) || 1;
+      const normalizedFlux = Float32Array.from(flux, x => (x - mean) / std);
+      
+      // 3. Create WebGL/WASM Tensor Payload
+      const tensor = new ort.Tensor('float32', normalizedFlux, [1, 3197, 1]);
+      const feeds = { [session.inputNames[0]]: tensor };
+      
+      // 4. Execute Edge AI Inference Graph
+      const results = await session.run(feeds);
+      const prob = results[session.outputNames[0]].data[0];
+      const prediction = prob >= 0.5 ? 1 : 0;
+      
+      setModelResult({
+        probability: Number(prob.toFixed(6)),
+        prediction: prediction,
+        is_planet_detected: prediction === 1
+      });
+    } catch (err) {
+      console.error("[Edge AI Error]", err);
       setModelError(true);
     } finally {
       setModelRunning(false);
