@@ -72,6 +72,14 @@ Python, TensorFlow/Keras, ONNX, React, Vite, Vercel
 
 ## Author
 
-Aliasger Bhabhrawala — second year, BITS Pilani (MSc Physics + BTech Manufacturing)
+**Aliasger Bhabhrawala**
 
-[LinkedIn](https://www.linkedin.com/in/aliasger-bhabhrawala) · [aliasgersb@gmail.com](mailto:aliasgersb@gmail.com)
+- GitHub: [https://github.com/Aliasgersb](https://github.com/Aliasgersb)
+- LinkedIn: [www.linkedin.com/in/aliasger-bhabhrawala](https://www.linkedin.com/in/aliasger-bhabhrawala)
+- Email: [aliasgersb@gmail.com](mailto:aliasgersb@gmail.com)
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
