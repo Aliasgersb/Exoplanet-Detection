@@ -11,8 +11,8 @@ export default function ModelPerformance({ onNavigate }) {
   const comparison = [
     { version: 'Random Forest',   data: 'Raw flux',             arch: '100 decision trees', result: '0 / 5 planets — Recall 0.00', selected: false },
     { version: 'CNN v1',          data: 'Raw flux',             arch: '2-layer CNN',        result: '2 / 5 planets — Recall 0.40 — 3 false positives', selected: true  },
-    { version: 'CNN v2',          data: 'BLS phase folded',     arch: '3-layer CNN',        result: '1 / 5 planets — Recall 0.20', selected: false },
-    { version: 'CNN v3',          data: 'Custom phase folded',  arch: '3-layer CNN',        result: '1 / 5 planets — Recall 0.20', selected: false },
+    { version: 'CNN v2',          data: 'BLS phase folded',     arch: '3-layer CNN',        result: '1 / 5 planets — Recall 0.20 — 0 false positives', selected: false },
+    { version: 'CNN v3',          data: 'Custom phase folded',  arch: '3-layer CNN',        result: '1 / 5 planets — Recall 0.20 — 3 false positives', selected: false },
     { version: 'CNN v4',          data: 'Custom phase folded',  arch: '2-layer CNN',        result: '2 / 5 planets — Recall 0.40 — 6 false positives', selected: false },
   ];
 

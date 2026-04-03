@@ -22,8 +22,8 @@ Five models were trained and evaluated:
 |---|---|---|---|---|
 | Random Forest | Raw flux | 100 trees | 0 / 5 | 0 |
 | CNN v1 | Raw flux | 2-layer CNN | 2 / 5 | 3 |
-| CNN v2 | BLS phase folded | 3-layer CNN | 1 / 5 | — |
-| CNN v3 | Custom phase folded | 3-layer CNN | 1 / 5 | — |
+| CNN v2 | BLS phase folded | 3-layer CNN | 1 / 5 | 0 |
+| CNN v3 | Custom phase folded | 3-layer CNN | 1 / 5 | 3 |
 | CNN v4 | Custom phase folded | 2-layer CNN | 2 / 5 | 6 |
 
 CNN v1 was selected. It achieved the same recall as the most complex model (CNN v4) with half the false positive rate. The more sophisticated models used phase folding — a technique that folds the light curve on the planet's orbital period to amplify the transit signal. Phase folding failed on this dataset because the observation window (~66 days per star) is too short for the period estimation algorithm (BLS) to reliably find the true period. CNN v1 avoided this entirely by working on the raw signal.
